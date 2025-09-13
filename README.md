@@ -2,6 +2,112 @@
 
 Este proyecto en **Java Swing** permite convertir valores entre distintas unidades de almacenamiento: **bits, bytes, kilobytes, megabytes, gigabytes y terabytes**. Incluye conversión automática al cambiar unidades o al ingresar un valor, y un botón para limpiar los campos.
 
+
+# Convertidor de Unidades de Almacenamiento
+
+Este proyecto está diseñado para convertir valores de almacenamiento digital entre distintas unidades: **Bits, Bytes, Kilobytes, Megabytes, Gigabytes, Terabytes y Petabytes**. Integra una interfaz gráfica en **Java Swing** y permite conversiones precisas usando base **1000**.
+
+---
+
+## 📁 Estructura del Proyecto
+
+---
+
+## ▣══ Paquete: `Interfaz` ══▣
+
+Contiene las ventanas gráficas y la interacción con el usuario.
+
+### ┣▇ `Frame1.java`
+Ventana principal del convertidor, con campos de entrada, selección de unidades y botones para convertir o limpiar los datos.
+
+#### Componentes principales:
+- `JTextField txtValor`: Campo para ingresar el valor a convertir.
+- `Choice chUnidadOrigen`: Combo para seleccionar la unidad de origen.
+- `Choice chUnidadDestino`: Combo para seleccionar la unidad destino.
+- `JTextField txtResultado`: Campo donde se muestra el resultado de la conversión.
+- `JButton btnConvertir`: Botón que ejecuta la conversión.
+- `JButton btnLimpiar`: Botón que limpia todos los campos y selecciones.
+
+#### Métodos principales:
+- `llenarChoices()`: Llena los combos de unidades con opciones: Bits, Bytes, KB, MB, GB, TB, PB.
+- `agregarListeners()`: Añade los eventos de conversión y limpieza.
+- `convertirABYtes(double valor, String unidad)`: Convierte cualquier unidad a **Bytes** usando base 1000.
+- `convertirDesdeBytes(double bytes, String unidadDestino)`: Convierte desde Bytes hacia la unidad seleccionada.
+- `limpiarCampos()`: Limpia todos los JTextFields y resetea los combos a su valor por defecto.
+
+---
+
+## ▣══ Paquete: `Utilidades` ══▣
+
+Contiene funciones auxiliares para los cálculos y formato de valores.
+
+### ┣▇ `ConversionUtil.java`
+Clase con métodos estáticos que realizan las conversiones entre unidades de almacenamiento.
+
+#### Métodos:
+- `public static double convertir(double valor, String unidadOrigen, String unidadDestino)`
+  - Convierte un valor de `unidadOrigen` a `unidadDestino`.
+  - Internamente primero convierte a Bytes y luego a la unidad final.
+  - Ejemplo:
+    ```java
+    double resultado = ConversionUtil.convertir(1000, "MB", "GB"); // Devuelve 1.0
+    ```
+
+- `public static String formatear(double valor)`
+  - Da formato a un número con hasta 10 decimales y separadores de miles.
+
+---
+
+## ▣══ Lógica de Conversión
+
+### Conversión base 1000:
+
+| Unidad | Equivalencia en Bytes |
+|--------|---------------------|
+| Bit    | 1/8 Byte            |
+| Byte   | 1 Byte              |
+| KB     | 1000 Bytes          |
+| MB     | 1000 KB             |
+| GB     | 1000 MB             |
+| TB     | 1000 GB             |
+| PB     | 1000 TB             |
+
+#### Ejemplo de flujo de conversión:
+1. Usuario ingresa `2048` en el campo `txtValor`.
+2. Selecciona `MB` como unidad de origen y `GB` como unidad destino.
+3. Al presionar `btnConvertir`:
+   - `convertirABYtes(2048, "MB")` → 2048 × 1,000,000 = 2,048,000,000 Bytes.
+   - `convertirDesdeBytes(2,048,000,000, "GB")` → 2,048,000,000 ÷ 1,000,000,000 = 2.048 GB.
+4. Resultado mostrado en `txtResultado`: `2.048 GB`.
+
+---
+
+## ▣══ Eventos de Interfaz
+
+### `btnConvertirActionPerformed`
+- Obtiene valor del usuario.
+- Valida que no esté vacío ni sea negativo.
+- Llama a `ConversionUtil.convertir(valor, unidadOrigen, unidadDestino)`.
+- Muestra el resultado en `txtResultado`.
+
+### `btnLimpiarActionPerformed`
+- Limpia `txtValor` y `txtResultado`.
+- Resetea `chUnidadOrigen` y `chUnidadDestino` al primer valor.
+
+---
+
+### ▣ Ejemplo de inicialización
+
+```java
+public static void main(String[] args) {
+    java.awt.EventQueue.invokeLater(() -> {
+        new Frame1().setVisible(true);
+    });
+}
+
+
+
+
 ```java
 package Interfaz;
 
